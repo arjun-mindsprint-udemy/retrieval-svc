@@ -1,6 +1,6 @@
 // Calls the embedding service
 async function embedQueryRemote(query) {
-    const response = await fetch('http://localhost:3022/embedQuery', {
+    const response = await fetch('http://embedding-svc:3022/embedQuery', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query })
@@ -11,7 +11,7 @@ async function embedQueryRemote(query) {
 
 // Calls the vectorDB service
 async function querySimilarRemote(embedding) {
-    const response = await fetch('http://localhost:3023/query', {
+    const response = await fetch('http://vectordb-svc:3023/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ embedding })
