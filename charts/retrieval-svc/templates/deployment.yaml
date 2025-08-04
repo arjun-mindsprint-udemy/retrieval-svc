@@ -1,27 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "node-app.fullname" . }}
+  name: {{ include "retrieval-svc.fullname" . }}
   labels:
-    {{- include "node-app.labels" . | nindent 4 }}
+    {{- include "retrieval-svc.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "node-app.selectorLabels" . | nindent 6 }}
+      {{- include "retrieval-svc.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      prometheus.io/scrape: "true"
-      prometheus.io/path: "/metrics"
-      prometheus.io/port: "5000"
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "node-app.labels" . | nindent 8 }}
+        {{- include "retrieval-svc.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -30,7 +27,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "node-app.serviceAccountName" . }}
+      serviceAccountName: {{ include "retrieval-svc.serviceAccountName" . }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -47,9 +44,6 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          env:
-            - name: OPENAI_API_KEY
-              value:  {{ .Values.env.openaiApiKey | quote }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
