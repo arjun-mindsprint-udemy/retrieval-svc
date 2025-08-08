@@ -7,8 +7,8 @@ const port = 3024
 app.use(express.json())
 
 app.post('/', async (req, res) => {
-    const {query} = req.body;
-    const results = await retrieveRelevantDocs(query);
+    const {query, topK, metric} = req.body;
+    const results = await retrieveRelevantDocs(query, topK, metric);
     res.json({ results });
 });
 
